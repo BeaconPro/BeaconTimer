@@ -1,5 +1,7 @@
 let timerInterval;
 let seconds = 0;
+let countdownInterval;
+let remainingSeconds = 0;
 
 function formatTime(sec) {
     let hrs = Math.floor(sec / 3600);
@@ -13,6 +15,7 @@ function updateTimer() {
 }
 
 function startTimer() {
+    if (timerInterval) return; // Prevent multiple intervals
     timerInterval = setInterval(() => {
         seconds++;
         updateTimer();
@@ -21,15 +24,14 @@ function startTimer() {
 
 function stopTimer() {
     clearInterval(timerInterval);
+    timerInterval = null;
 }
-let countdownInterval;
-let remainingSeconds = 0;
 
-function formatTime(sec) {
-    let hrs = Math.floor(sec / 3600);
-    let mins = Math.floor((sec % 3600) / 60);
-    let secs = sec % 60;
-    return `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+function resetTimer() {
+    clearInterval(timerInterval);
+    timerInterval = null;
+    seconds = 0;
+    updateTimer();
 }
 
 function updateCountdownTimer() {
@@ -56,9 +58,4 @@ function startCountdown() {
     } else {
         alert("Please enter a valid number of seconds.");
     }
-}
-function resetTimer() {
-    clearInterval(timerInterval);
-    seconds = 0;
-    updateTimer();
 }
