@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -109,6 +109,7 @@
         let seconds = 0;
         let countdownInterval;
         let remainingSeconds = 0;
+        let maxTime = 3600; // Set maximum time limit in seconds (1 hour)
 
         function formatTime(sec) {
             let hrs = Math.floor(sec / 3600);
@@ -122,10 +123,15 @@
         }
 
         function startTimer() {
-            if (timerInterval) return; // Prevent multiple intervals
+            if (timerInterval || seconds >= maxTime) return; // Prevent multiple intervals and limit exceed
             timerInterval = setInterval(() => {
-                seconds++;
-                updateTimer();
+                if (seconds < maxTime) {
+                    seconds++;
+                    updateTimer();
+                } else {
+                    stopTimer();
+                    alert("Maximum time limit reached!");
+                }
             }, 1000);
             document.getElementById('startTimer').disabled = true;
             document.getElementById('stopTimer').disabled = false;
@@ -159,7 +165,7 @@
             const inputElement = document.getElementById("countdownInput");
             remainingSeconds = parseInt(inputElement.value, 10) || 0; // Get user input
 
-            if (remainingSeconds > 0) {
+            if (remainingSeconds > 0 && remainingSeconds <= maxTime) {
                 updateCountdownTimer(); // Update the display immediately
                 countdownInterval = setInterval(() => {
                     remainingSeconds--;
@@ -170,6 +176,8 @@
                         alert("Time's up!");
                     }
                 }, 1000);
+            } else if (remainingSeconds > maxTime) {
+                alert(`Please enter a time less than or equal to ${formatTime(maxTime)}.`);
             } else {
                 alert("Please enter a valid number of seconds.");
             }
