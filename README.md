@@ -12,7 +12,7 @@ BeaconTimer is a simple and intuitive web-based timer application designed to tr
 ## GitHub Pages Website
 The application is hosted on GitHub Pages. You can access it directly using the following link:
 
-[BeaconTimer GitHub Pages Website](https://meisacoder123.github.io/BeaconTimer)
+[BeaconTimer GitHub Pages Website](https://beaconpro.github.io/BeaconTimer)
 
 ## Installation
 To get started with BeaconTimer locally, you can clone the repository and open the `index.html` file in your browser:
