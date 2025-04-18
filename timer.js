@@ -1,61 +1,29 @@
-let timerInterval;
-let seconds = 0;
-let countdownInterval;
-let remainingSeconds = 0;
+let countdown;
+    
+    function startTimer() {
+      clearInterval(countdown);
 
-function formatTime(sec) {
-    let hrs = Math.floor(sec / 3600);
-    let mins = Math.floor((sec % 3600) / 60);
-    let secs = sec % 60;
-    return `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-}
+      let minutes = parseInt(document.getElementById('minutes').value) || 0;
+      let seconds = parseInt(document.getElementById('seconds').value) || 0;
 
-function updateTimer() {
-    document.getElementById("timer").textContent = formatTime(seconds);
-}
+      let totalSeconds = minutes * 60 + seconds;
 
-function startTimer() {
-    if (timerInterval) return; // Prevent multiple intervals
-    timerInterval = setInterval(() => {
-        seconds++;
-        updateTimer();
-    }, 1000);
-}
+      countdown = setInterval(() => {
+        if (totalSeconds <= 0) {
+          clearInterval(countdown);
+          document.getElementById('timer').textContent = "Time's up!";
+          return;
+        }
 
-function stopTimer() {
-    clearInterval(timerInterval);
-    timerInterval = null;
-}
+        totalSeconds--;
 
-function resetTimer() {
-    clearInterval(timerInterval);
-    timerInterval = null;
-    seconds = 0;
-    updateTimer();
-}
+        let min = Math.floor(totalSeconds / 60);
+        let sec = totalSeconds % 60;
 
-function updateCountdownTimer() {
-    const timerElement = document.getElementById("countdownTimer");
-    timerElement.textContent = formatTime(remainingSeconds);
-}
-
-function startCountdown() {
-    clearInterval(countdownInterval); // Clear any previous countdown
-    const inputElement = document.getElementById("countdownInput");
-    remainingSeconds = parseInt(inputElement.value, 10) || 0; // Get user input
-
-    if (remainingSeconds > 0) {
-        updateCountdownTimer(); // Update the display immediately
-        countdownInterval = setInterval(() => {
-            remainingSeconds--;
-            updateCountdownTimer();
-
-            if (remainingSeconds <= 0) {
-                clearInterval(countdownInterval);
-                alert("Time's up!");
-            }
-        }, 1000);
-    } else {
-        alert("Please enter a valid number of seconds.");
+        document.getElementById('timer').textContent = 
+          `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
+      }, 1000);
     }
-}
+    if seconds && minutes = 0 {
+      alert('Time/s Up!')
+    }
