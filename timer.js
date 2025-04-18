@@ -24,6 +24,6 @@ let countdown;
           `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
       }, 1000);
     }
-    if seconds && minutes = 0 {
+    if seconds = 0 && minutes = 0 {
       alert('Time/s Up!')
     }
