@@ -1,29 +1,64 @@
-let countdown;
-    
+document.addEventListener('DOMContentLoaded', () => {
+    const timerForm = document.getElementById('timerForm');
+    const minutesInput = document.getElementById('minutes');
+    const secondsInput = document.getElementById('seconds');
+    const timerDisplay = document.getElementById('timer');
+    const errorMessage = document.getElementById('error-message');
+    const startButton = timerForm.querySelector('button[type="submit"]');
+    let intervalId = null;
+    let totalTime = 0;
+
+    function updateDisplay() {
+        const mins = Math.floor(totalTime / 60);
+        const secs = totalTime % 60;
+        timerDisplay.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+
     function startTimer() {
-      clearInterval(countdown);
+        if (intervalId !== null) {
+            clearInterval(intervalId); // Clear any existing interval
+        }
+        startButton.disabled = true;
+        errorMessage.style.display = 'none';
+        totalTime = parseInt(minutesInput.value, 10) * 60 + parseInt(secondsInput.value, 10);
 
-      let minutes = parseInt(document.getElementById('minutes').value) || 0;
-      let seconds = parseInt(document.getElementById('seconds').value) || 0;
-
-      let totalSeconds = minutes * 60 + seconds;
-
-      countdown = setInterval(() => {
-        if (totalSeconds <= 0) {
-          clearInterval(countdown);
-          document.getElementById('timer').textContent = "Time's up!";
-          return;
+        if (isNaN(totalTime) || totalTime < 0) {
+            errorMessage.style.display = 'block';
+            errorMessage.textContent = 'Please enter valid numbers.';
+            startButton.disabled = false;
+            return;
         }
 
-        totalSeconds--;
+        updateDisplay();
 
-        let min = Math.floor(totalSeconds / 60);
-        let sec = totalSeconds % 60;
+        intervalId = setInterval(() => {
+            totalTime--;
+            updateDisplay();
 
-        document.getElementById('timer').textContent = 
-          `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
-      }, 1000);
+            if (totalTime <= 0) {
+                clearInterval(intervalId);
+                intervalId = null;
+                timerDisplay.textContent = 'Time’s Up!';
+                startButton.disabled = false;
+            }
+        }, 1000);
     }
-    if seconds = 0 && minutes = 0 {
-      alert('Time/s Up!')
-    }
+
+    timerForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+        startTimer();
+    });
+
+    // Optional: Add a stop button
+    const stopButton = document.createElement('button');
+    stopButton.textContent = 'Stop';
+    stopButton.addEventListener('click', () => {
+        if (intervalId !== null) {
+            clearInterval(intervalId);
+            intervalId = null;
+            startButton.disabled = false;
+            timerDisplay.textContent = 'Stopped';
+        }
+    });
+    timerForm.parentNode.insertBefore(stopButton, timerForm.nextSibling);
+});
